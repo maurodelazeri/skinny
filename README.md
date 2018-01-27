@@ -1,4 +1,4 @@
-# skinny
+# Skinny
 Lightweight in memory time-series database written in Golang
 
 # Example
