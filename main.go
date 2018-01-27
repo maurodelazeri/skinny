@@ -1,9 +1,5 @@
 package skinny
 
-import (
-	"fmt"
-)
-
 // Single point
 type Point struct {
 	timestamp uint64
