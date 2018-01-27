@@ -11,25 +11,25 @@ type Point struct {
 type Metric struct {
 	newest, oldest           *Point
 	length                   uint64
-	capacity                 uint64
+	Capacity                 uint64
 	index                    map[uint64]*Point // coarseSearch index
 	indexnewest, indexoldest uint64
-	indexinterval            uint64 // in seconds > 0
+	Indexinterval            uint64 // in seconds > 0
 }
 
 func (m *Metric) Init() {
 	m.index = make(map[uint64]*Point)
-	if m.capacity == 0 {
-		m.capacity = 86400 //day of seconds
+	if m.Capacity == 0 {
+		m.Capacity = 86400 //day of seconds
 	}
-	if m.indexinterval == 0 {
-		m.indexinterval = 3600 //seconds in hour
+	if m.Indexinterval == 0 {
+		m.Indexinterval = 3600 //seconds in hour
 	}
 }
 
 // Add a pointer to the search index if needed, else do nothing and return.
 func (m *Metric) indexPtr(p *Point) {
-	bucket := uint64(int(p.timestamp / m.indexinterval))
+	bucket := uint64(int(p.timestamp / m.Indexinterval))
 	if _, ok := m.index[bucket]; ok {
 		return // bail, point already indexed.
 	}
@@ -49,7 +49,7 @@ func (m *Metric) indexPtr(p *Point) {
 // left trim for the metric stack.
 func (m *Metric) Ltrim(t int) {
 	for i := 0; i <= t; i++ {
-		nextBucket := uint64(int(m.oldest.next.timestamp / m.indexinterval))
+		nextBucket := uint64(int(m.oldest.next.timestamp / m.Indexinterval))
 		if nextBucket == m.indexoldest { // If the truncate does not push us into the next bucket.
 			m.index[nextBucket] = m.oldest.next // shift right
 		} else { // if it does.
@@ -65,8 +65,8 @@ func (m *Metric) Ltrim(t int) {
 func (m *Metric) Insert(timestamp uint64, value map[string]interface{}, overwriting bool) {
 	var p = &Point{timestamp, value, nil}
 	// check for overflow, deindex, and truncate oldest.
-	if m.length >= m.capacity {
-		m.Ltrim(int(m.length - m.capacity))
+	if m.length >= m.Capacity {
+		m.Ltrim(int(m.length - m.Capacity))
 	}
 	// If our first entry
 	if m.newest == nil && m.oldest == nil {
@@ -107,7 +107,7 @@ func (m *Metric) Insert(timestamp uint64, value map[string]interface{}, overwrit
 
 // Given time(t) return a pointer for that point or the next in list.
 func (m *Metric) Search(t uint64) *Point {
-	bucket := uint64(int(t / m.indexinterval))
+	bucket := uint64(int(t / m.Indexinterval))
 	startpoint := m.index[bucket]
 	current := startpoint
 	if t == 0 {
