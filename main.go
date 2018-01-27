@@ -1,7 +1,5 @@
 package main
 
-// Test of a indexed singly linked list for Raposa.
-
 import (
 	"fmt"
 )
