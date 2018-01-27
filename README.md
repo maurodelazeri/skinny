@@ -8,12 +8,12 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/maurodelazeri/skinny"
 )
 
-
 func main() {
-	testmetric := skinny.Metric{capacity: 131487, indexinterval: 1440} // 3 months of per minute, indexed on days
+	testmetric := skinny.Metric{Capacity: 131487, Indexinterval: 1440} // 3 months of per minute, indexed on days
 	testmetric.Init()
 
 	test := map[string]interface{}{
@@ -34,3 +34,13 @@ func main() {
 		fmt.Printf("Found: %+v\n", pnt)
 	}
 }
+
+```
+
+```
+go run main.go 
+Found: &{timestamp:1416585013 value:map[test:mauro] next:0xc42000a120}
+Found: &{timestamp:1416585014 value:map[test:mauro] next:0xc42000a140}
+Found: &{timestamp:1416585015 value:map[test:mauro] next:0xc42000a160}
+Found: &{timestamp:1416585015 value:map[test:mauro] next:<nil>}
+```
